@@ -5,11 +5,6 @@
 			<attribute name="FROM_GRADLE_MODEL" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src/main/resources">
-		<attributes>
-			<attribute name="FROM_GRADLE_MODEL" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="lib" path="C:/Users/liferay/.gradle/caches/modules-2/files-2.1/javax.portlet/portlet-api/3.0.0/24f8d93942ac36b50c56a59a594d2b5fa6a799bb/portlet-api-3.0.0.jar" sourcepath="C:/Users/liferay/.gradle/caches/modules-2/files-2.1/javax.portlet/portlet-api/3.0.0/f3f0f35253a9942760396b3b396d5b2d0dc634fe/portlet-api-3.0.0-sources.jar"/>

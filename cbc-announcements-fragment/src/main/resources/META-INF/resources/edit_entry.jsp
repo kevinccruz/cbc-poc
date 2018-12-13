@@ -13,7 +13,7 @@
  * details.
  */
 --%>
-Custom Edit Entry.
+
 <%@ include file="/init.jsp" %>
 
 <%
@@ -65,7 +65,11 @@ if (entry == null) {
 				long classPK = -1;
 
 				String[] distributionScopeArray = StringUtil.split(distributionScope);
-
+				
+				for(String ds : distributionScopeArray) {
+					System.out.println(ds);
+				}
+				
 				if (distributionScopeArray.length == 2) {
 					classNameId = GetterUtil.getLong(distributionScopeArray[0]);
 					classPK = GetterUtil.getLong(distributionScopeArray[1]);
@@ -73,11 +77,12 @@ if (entry == null) {
 
 				boolean submitOnChange = false;
 				%>
-
-				<%@ include file="/entry_select_scope.jspf" %>
+				<%--CUSTOM START --%>
+				<%@ include file="/multi_entry_select_scope.jspf" %>
+				<%--CUSTOM END --%>
 			</c:otherwise>
 		</c:choose>
-
+		
 		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="title" />
 
 		<aui:input name="url" />
@@ -133,13 +138,14 @@ if (entry == null) {
 		document.<portlet:namespace />fm.<portlet:namespace />content.value = <portlet:namespace />getContent();
 		document.<portlet:namespace />fm.submit();
 	}
-
+	// CUSTOM START
 	function <portlet:namespace />saveEntry() {
-		document.<portlet:namespace />fm.action = '<portlet:actionURL name="/announcements/edit_entry" />';
+		document.<portlet:namespace />fm.action = '<portlet:actionURL name="/announcements/multi_edit_entry" />';
 		document.<portlet:namespace />fm.target = '';
 		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (entry == null) ? Constants.ADD : Constants.UPDATE %>';
 		document.<portlet:namespace />fm.<portlet:namespace />content.value = <portlet:namespace />getContent();
 
 		submitForm(document.<portlet:namespace />fm);
 	}
+	// CUSTOM END
 </aui:script>
