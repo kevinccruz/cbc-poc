@@ -1,0 +1,9 @@
+Bundle-Name: CBC-announcement-api
+Bundle-SymbolicName: CBC.announcement.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.comerica.exception,\
+	com.comerica.model,\
+	com.comerica.service,\
+	com.comerica.service.persistence
+-includeresource: META-INF/service.xml=../CBC-announcement-service/service.xml
