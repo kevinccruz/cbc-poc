@@ -1,4 +1,0 @@
-Bundle-Name: cbc-announcements-fragment
-Bundle-SymbolicName: cbc.announcements.fragment
-Bundle-Version: 1.0.0
-Fragment-Host: com.liferay.announcements.web;bundle-version="2.0.7"
