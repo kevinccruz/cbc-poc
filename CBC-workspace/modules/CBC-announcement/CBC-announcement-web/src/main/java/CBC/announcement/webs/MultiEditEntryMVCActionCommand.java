@@ -26,7 +26,6 @@ import org.osgi.service.component.annotations.Reference;
 
 import com.comerica.model.MultiScopeAnnouncements;
 import com.comerica.service.MultiScopeAnnouncementsLocalService;
-import com.comerica.service.MultiScopeAnnouncementsService;
 import com.liferay.announcements.kernel.model.AnnouncementsEntry;
 import com.liferay.announcements.kernel.service.AnnouncementsEntryService;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -57,19 +56,19 @@ public class MultiEditEntryMVCActionCommand extends BaseMVCActionCommand {
 	protected void deleteEntry(ActionRequest actionRequest) throws Exception {
 		long entryId = ParamUtil.getLong(actionRequest, "entryId");
 		
-		//cross reference MultiScope Entry, for each Entry deleteEntry
+		//cross reference MultiScopeAnnouncements to get related announcements
 		List<MultiScopeAnnouncements> msaList = 
-				_multiScopeAnnouncementsLocalService.retrieveMultiScopeAnnouncements(entryId);
+				(List<MultiScopeAnnouncements>) _multiScopeAnnouncementsLocalService.retrieveMultiScopeAnnouncements(entryId);
 		
 		if(Validator.isNotNull(msaList)) {
 			for (MultiScopeAnnouncements msa : msaList) {
 				long id = msa.getEntryId();
 				_announcementsEntryService.deleteEntry(id);
+				_multiScopeAnnouncementsLocalService.deleteMultiScopeAnnouncements(id);
 			}
 		}else {
 			_announcementsEntryService.deleteEntry(entryId);
 		}
-
 	}
 
 	@Override
@@ -112,16 +111,18 @@ public class MultiEditEntryMVCActionCommand extends BaseMVCActionCommand {
 
 		long entryId = ParamUtil.getLong(actionRequest, "entryId");
 
-		//Check for MultipleScopes, otherwise process as one.
-		boolean multipleScope = false;
-		
+		//Check for MultipleScopes
+		boolean multipleScope = false;		
 		String[] multipleScopes = ParamUtil.getStringValues(actionRequest, "distributionScope");
-		int scopeCount = multipleScopes.length;
-		if(scopeCount > 0) {
+
+		if(multipleScopes.length >= 2 &&
+			StringUtil.split(multipleScopes[0]).length > 1) {
 			multipleScope = true;
 		}
+
 		ArrayList<Long> announcementEntryIds = new ArrayList<Long>();
 		
+		// Runs through at least once, for single scope entries.
 		int iterations = 0;
 		do {
 			String[] distributionScopeParts;
@@ -200,7 +201,7 @@ public class MultiEditEntryMVCActionCommand extends BaseMVCActionCommand {
 					expirationDateHour, expirationDateMinute, priority, alert);
 				
 				// Adds to multiScopes table if more than one scope
-				if (multipleScopes.length > 0) {
+				if (multipleScope) {
 					announcementEntryIds.add(aes.getEntryId());
 				}
 			}
@@ -234,9 +235,9 @@ public class MultiEditEntryMVCActionCommand extends BaseMVCActionCommand {
 			}
 			
 			iterations++;
-		} while(iterations < scopeCount);
+		} while(multipleScope && iterations < multipleScopes.length);
 		
-		if(multipleScopes.length > 0) {
+		if(multipleScope) {
 			_multiScopeAnnouncementsLocalService.addMultiScopeAnnouncements(announcementEntryIds);
 		}
 	}

@@ -6,5 +6,4 @@ dependencies {
 	compileOnly group: "javax.servlet.jsp", name: "javax.servlet.jsp-api", version: "2.3.1"
 	compileOnly group: "biz.aQute.bnd", name: "biz.aQute.bndlib", version: "3.1.0"
 	compileOnly project(":modules:CBC-announcement:CBC-announcement-api")
-	compileOnly project(":modules:CBC-announcement:CBC-announcement-service")
 }

@@ -28,6 +28,7 @@ import com.comerica.service.persistence.impl.MultiScopeAnnouncementsPersistenceI
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 /**
  * The implementation of the multi scope announcements local service.
@@ -65,12 +66,17 @@ public class MultiScopeAnnouncementsLocalServiceImpl
 		}
 	}
 	
-	public List<MultiScopeAnnouncements> retrieveMultiScopeAnnouncements(long entryId) throws PortalException {	
+	public List<MultiScopeAnnouncements> retrieveMultiScopeAnnouncements(long entryId) {	
 		
-		MultiScopeAnnouncements msa = MultiScopeAnnouncementsLocalServiceUtil.getMultiScopeAnnouncements(entryId);
-		long multiScopeId = msa.getMultiScopeId();
+		MultiScopeAnnouncements msa = MultiScopeAnnouncementsLocalServiceUtil.fetchMultiScopeAnnouncements(entryId);
 		
-		return MultiScopeAnnouncementsUtil.findByMultiScopeId(multiScopeId);
+		if(Validator.isNotNull(msa)) {
+			long multiScopeId = msa.getMultiScopeId();
+			
+			return MultiScopeAnnouncementsUtil.findByMultiScopeId(multiScopeId);
+		}
+		
+		return null;
 	}
 	
 	private Log _log = LogFactoryUtil.getLog(MultiScopeAnnouncementsLocalServiceImpl.class);
